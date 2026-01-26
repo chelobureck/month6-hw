@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from users.models import CustomUserModel
 from users.serializers import UserCreateSerializer, UserAuthSerializer
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 
@@ -15,7 +15,7 @@ def registration_api_view(request):
     username = serializer.validated_data['username'] # type: ignore
     password = serializer.validated_data['password'] # type: ignore
 
-    user = User.objects.create_user(username=username, password=password)
+    user = CustomUserModel.objects.create_user(username=username, password=password) # type: ignore
 
     return Response(status=status.HTTP_201_CREATED, data={"user_id": user.id}) # type: ignore
 
