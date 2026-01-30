@@ -26,43 +26,48 @@ class GenreListAPIView(ListCreateAPIView):
     serializer_class = GenreSerializer
     pagination_class = PageNumberPagination
 
+class FilmListAPIView(ListCreateAPIView):
+    queryset = FilmModel.objects.all()
+    serializer_class = FilmListSerializer
+    pagination_class = PageNumberPagination
 
-@api_view(['GET', 'POST'])
-def film_list_api_view(request):
-    """
-    получает фильмы с бд в виде QuerySet
-    переформатирует в Serialize
-    """
-    if request.method == 'GET':
-        films = FilmModel.objects.select_related('director').prefetch_related('reviews', 'genre').all()
 
-        data = FilmListSerializer(films, many=True).data
+# @api_view(['GET', 'POST'])
+# def film_list_api_view(request):
+#     """
+#     получает фильмы с бд в виде QuerySet
+#     переформатирует в Serialize
+#     """
+#     if request.method == 'GET':
+#         films = FilmModel.objects.select_related('director').prefetch_related('reviews', 'genre').all()
 
-        return Response(data=data, status=status.HTTP_200_OK)
-    if request.method == "POST":
-        serializer = FilmValidateSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST, 
-                            data=serializer.errors)
-        title = serializer.validated_data.get('title') # type: ignore
-        text = serializer.validated_data.get('text') # type: ignore
-        relaese_year = serializer.validated_data.get('relaese_year') # type: ignore
-        rating = serializer.validated_data.get('rating') # type: ignore
-        is_hit = serializer.validated_data.get('is_hit') # type: ignore
-        director_id = serializer.validated_data.get("director_id") # type: ignore
-        genres = serializer.validated_data.get("genres") # type: ignore
+#         data = FilmListSerializer(films, many=True).data
 
-        film = FilmModel.objects.create(
-            title=title,
-            text=text,
-            relaese_year=relaese_year,
-            rating=rating,
-            is_hit=is_hit,
-            director_id=director_id
-        )
-        film.genre.set(genres) # type: ignore
+#         return Response(data=data, status=status.HTTP_200_OK)
+#     if request.method == "POST":
+#         serializer = FilmValidateSerializer(data=request.data)
+#         if not serializer.is_valid():
+#             return Response(status=status.HTTP_400_BAD_REQUEST, 
+#                             data=serializer.errors)
+#         title = serializer.validated_data.get('title') # type: ignore
+#         text = serializer.validated_data.get('text') # type: ignore
+#         relaese_year = serializer.validated_data.get('relaese_year') # type: ignore
+#         rating = serializer.validated_data.get('rating') # type: ignore
+#         is_hit = serializer.validated_data.get('is_hit') # type: ignore
+#         director_id = serializer.validated_data.get("director_id") # type: ignore
+#         genres = serializer.validated_data.get("genres") # type: ignore
 
-        return Response(status=status.HTTP_201_CREATED, data=FilmDetailSerializer(film).data)
+#         film = FilmModel.objects.create(
+#             title=title,
+#             text=text,
+#             relaese_year=relaese_year,
+#             rating=rating,
+#             is_hit=is_hit,
+#             director_id=director_id
+#         )
+#         film.genre.set(genres) # type: ignore
+
+#         return Response(status=status.HTTP_201_CREATED, data=FilmDetailSerializer(film).data)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
