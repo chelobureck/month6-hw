@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from common.validators import validated_birthday
 from films.models import FilmModel, GenresModel, DirectorModel
 from films.serializers import FilmListSerializer, FilmDetailSerializer, FilmValidateSerializer, GenreSerializer, DirectorSerializer
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
@@ -30,6 +31,9 @@ class FilmListAPIView(ListCreateAPIView):
     queryset = FilmModel.objects.all()
     serializer_class = FilmListSerializer
     pagination_class = PageNumberPagination
+
+    def validate_birthday(self, birthday):
+        return validated_birthday(birthday=birthday)
 
 
 # @api_view(['GET', 'POST'])

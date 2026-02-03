@@ -4,10 +4,11 @@ from users.managers import CustomUserManager
 
 class CustomUserModel(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
-    phone_num = models.CharField(max_length=13)
-    is_active = models.BooleanField(default=False)
+    phone_num = models.CharField(max_length=13, null=True)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    birthday = models.DateField(null=True)
 
     objects = CustomUserManager()
 

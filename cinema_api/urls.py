@@ -18,12 +18,22 @@ from django.contrib import admin
 from django.urls import path, include
 # from films.views import film_list_api_view, film_detail_api_view
 from cinema_api import swagger
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+    TokenVerifyView
+)
+from users.views import CustomTokenObtainPairView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/films/', include("films.urls")),
     path('api/v1/users/', include("users.urls")),
+
+
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
 ]
 
