@@ -15,5 +15,3 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class RegisterAPIView(CreateAPIView):
 	serializer_class = UserCreateSerializer
-	
-

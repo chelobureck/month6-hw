@@ -15,6 +15,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
+class OAuthCodeSerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+
 class UserAuthSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     password = serializers.CharField()
