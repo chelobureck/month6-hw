@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from users.tasks import delete_temp_files, send_welcome_email, send_otp
 
 
 
@@ -31,6 +32,9 @@ class VerifyRegistrationAPIView(CreateAPIView):
 			username=serializer.validated_data['username'],
 			is_staff=is_staff
 		)
+		
+		delete_temp_files.delay(user.id)
+		send_welcome_email.delay(user.id)
 		
 		refresh = RefreshToken.for_user(user)
 		return Response({
